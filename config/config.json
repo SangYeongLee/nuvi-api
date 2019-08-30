@@ -1,0 +1,32 @@
+{
+  "development": {
+    "username":"hyj",
+    "password":"hyjnuvi2019",
+    "database":"database_nuvi",
+    "host":"database-nuvi.c30ask5oe2aw.ap-northeast-2.rds.amazonaws.com",
+    "dialect":"mysql",
+    "charset":"utf8",
+    "collate": "utf8_general_ci",
+    "operatorsAliases": false
+  },
+  "test": {
+    "username":"hyj",
+    "password":"hyjnuvi2019",
+    "database":"database_nuvi",
+    "host":"database-nuvi.c30ask5oe2aw.ap-northeast-2.rds.amazonaws.com",
+    "dialect":"mysql",
+    "charset":"utf8",
+    "collate": "utf8_general_ci",
+    "operatorsAliases": false
+  },
+  "production": {
+    "username":"hyj",
+    "password":"hyjnuvi2019",
+    "database":"database_nuvi",
+    "host":"database-nuvi.c30ask5oe2aw.ap-northeast-2.rds.amazonaws.com",
+    "dialect":"mysql",
+    "charset":"utf8",
+    "collate": "utf8_general_ci",
+    "operatorsAliases": false
+  }
+}
