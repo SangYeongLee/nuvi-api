@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-var app = require('../app');
+var app = require('../main');
 var debug = require('debug')('app:server');
 var http = require('http');
 const sequelize = require('../models').sequelize;
@@ -25,8 +25,9 @@ var server = http.createServer(app);
 /**
  * Listen on provided port, on all network interfaces.
  */
-
+console.log(`outside sync port: ${port}`)
 sequelize.sync().then(function(){
+  console.log(`inside sync port: ${port}`)
   server.listen(port);
 })
 

@@ -6,8 +6,7 @@
     "host":"database-nuvi.c30ask5oe2aw.ap-northeast-2.rds.amazonaws.com",
     "dialect":"mysql",
     "charset":"utf8",
-    "collate": "utf8_general_ci",
-    "operatorsAliases": false
+    "collate": "utf8_general_ci"
   },
   "test": {
     "username":"hyj",
@@ -16,8 +15,7 @@
     "host":"database-nuvi.c30ask5oe2aw.ap-northeast-2.rds.amazonaws.com",
     "dialect":"mysql",
     "charset":"utf8",
-    "collate": "utf8_general_ci",
-    "operatorsAliases": false
+    "collate": "utf8_general_ci"
   },
   "production": {
     "username":"hyj",
@@ -26,7 +24,6 @@
     "host":"database-nuvi.c30ask5oe2aw.ap-northeast-2.rds.amazonaws.com",
     "dialect":"mysql",
     "charset":"utf8",
-    "collate": "utf8_general_ci",
-    "operatorsAliases": false
+    "collate": "utf8_general_ci"
   }
 }
