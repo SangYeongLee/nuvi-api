@@ -18,10 +18,10 @@
     "collate": "utf8_general_ci"
   },
   "production": {
-    "username":"hyj",
-    "password":"hyjnuvi2019",
-    "database":"database_nuvi",
-    "host":"database-nuvi.c30ask5oe2aw.ap-northeast-2.rds.amazonaws.com",
+    "username":"admin",
+    "password":"nuvi1234",
+    "database":"nuvi_database",
+    "host":"nuvi-database-v1.coaxvb1s16kq.ap-northeast-2.rds.amazonaws.com",
     "dialect":"mysql",
     "charset":"utf8",
     "collate": "utf8_general_ci"
