@@ -1,68 +1,41 @@
 'use strict';
 
+const preData = require('../seeders_pre');
+
+const studentsNumberPerClass = 30;
+
+const getAllStudents = ((studentsNumberPerClass) => {
+  let allStudents = [];
+  preData.allSchoolClassGrade.forEach(school =>{
+    let i = studentsNumberPerClass;
+    while(i>0){
+      allStudents.push({
+        name: `${school.emhs}_g${school.grade}_c${school.classNumber}_${i}`,
+        gender: 1,
+        student_num: `${i}`,
+        age: 10,
+        height: 160,
+        weight: 60,
+        rfid: `${school.emhs}_g${school.grade}_c${school.classNumber}_${i}_kiosk`,
+        chat_id:`${school.emhs}_g${school.grade}_c${school.classNumber}_${i}_chat`,
+        addmission:2019-school.grade,
+        allergy: "1%2%3",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      })
+      i--
+    }
+  })
+  return allStudents
+})(studentsNumberPerClass)
+
+
+
 module.exports = {
   up: (queryInterface, Sequelize) => {
-      return queryInterface.bulkInsert('Students', [{
-        name:"홍길동",
-        gender:"male",
-        SchoolId:1,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },{
-        name:"이순신",
-        gender:"male",
-        SchoolId:2,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },{
-        name:"곽재우",
-        gender:"male",
-        SchoolId:3,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },{
-        name:"김세종",
-        gender:"male",
-        SchoolId:3,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },{
-        name:"김태종",
-        gender:"male",
-        SchoolId:4,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },{
-        name:"김정종",
-        gender:"male",
-        SchoolId:5,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },{
-        name:"김문종",
-        gender:"male",
-        SchoolId:5,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },{
-        name:"김예종",
-        gender:"male",
-        SchoolId:6,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },{
-        name:"홍범도",
-        gender:"male",
-        SchoolId:7,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },{
-        name:"김철수",
-        gender:"male",
-        SchoolId:8,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      }], {});
+      return queryInterface.bulkInsert('Students',
+      getAllStudents
+      , {});
 
   },
 

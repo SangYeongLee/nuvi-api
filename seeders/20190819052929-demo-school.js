@@ -1,59 +1,13 @@
 'use strict';
 
+const preData = require('../seeders_pre');
+
 module.exports = {
   up: (queryInterface, Sequelize) => {
 
-      return queryInterface.bulkInsert('Schools', [{
-        schoolName:"남산초등학교",
-        grade:1,
-        classNumber:1,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        schoolName:"남산초등학교",
-        grade:1,
-        classNumber:2,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },{
-        schoolName:"남산초등학교",
-        grade:2,
-        classNumber:1,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },{
-        schoolName:"남산초등학교",
-        grade:2,
-        classNumber:2,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },{
-        schoolName:"동산초등학교",
-        grade:1,
-        classNumber:1,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        schoolName:"동산초등학교",
-        grade:1,
-        classNumber:2,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },{
-        schoolName:"동산초등학교",
-        grade:2,
-        classNumber:1,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },{
-        schoolName:"동산초등학교",
-        grade:2,
-        classNumber:2,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      }], {});
+      return queryInterface.bulkInsert('Schools',
+      preData.allSchoolClassGrade
+      , {});
 
   },
 
