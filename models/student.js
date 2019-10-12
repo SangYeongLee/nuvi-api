@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     Student.hasMany(models.SupplyAndLeft);
 
     //belongs To school
-    Student.belongsTo(models.School);
+    Student.belongsTo(models.School_sub);
   };
   return Student;
 };

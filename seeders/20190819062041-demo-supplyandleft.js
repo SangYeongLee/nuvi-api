@@ -6,13 +6,19 @@ const bulkGenerate = () => {
     for(let studentId=1; studentId< 6; studentId ++) {
       for(let foods=1; foods< 7 ; foods++) {
         const supplyLeft = {
-          StudentId:studentId,
+
           date:new Date(2019,7,day),
-          FoodId:foods,
+          bld:"l",
           food_supply:300,
           food_left:100,
+          supply_time: new Date(),
+          left_time: new Date(),
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
+
+          StudentId:studentId,
+          FoodId:foods,
+          KioskId: null
         }
         bulk.push(supplyLeft);
       }
