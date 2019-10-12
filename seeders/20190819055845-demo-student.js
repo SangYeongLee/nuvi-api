@@ -39,7 +39,7 @@ module.exports = {
     const schools = preData.schools
     // get current School table's Ids
     const schoolIds = await queryInterface.sequelize.query(
-      `SELECT id from Schools;`
+      'SELECT id from Schools'
     );
 
     const schoolIdArray = schoolIds[0].map(school=>school.id)

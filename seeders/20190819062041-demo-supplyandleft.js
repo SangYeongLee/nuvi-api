@@ -1,13 +1,12 @@
 'use strict';
 
-const bulkGenerate = () => {
+const bulkGenerate = (studentsIdArray, foodsIdArray) => {
   let bulk = [];
-  for(let day=12; day <14; day++ ){
-    for(let studentId=1; studentId< 6; studentId ++) {
-      for(let foods=1; foods< 7 ; foods++) {
-        const supplyLeft = {
-
-          date:new Date(2019,7,day),
+  studentsIdArray.forEach(studentId =>{
+    foodsIdArray.forEach(foodId =>{
+      bulk.push(
+        {
+          date:new Date(),
           bld:"l",
           food_supply:300,
           food_left:100,
@@ -17,36 +16,32 @@ const bulkGenerate = () => {
           updatedAt: new Date(),
 
           StudentId:studentId,
-          FoodId:foods,
+          FoodId:foodId,
           KioskId: null
         }
-        bulk.push(supplyLeft);
-      }
-    }
+      )
+    })
+  })
 
-    for(let studentId=6; studentId< 11; studentId ++) {
-      for(let foods=4; foods< 10 ; foods++) {
-        const supplyLeft = {
-          StudentId:studentId,
-          date:new Date(2019,7,day),
-          FoodId:foods,
-          food_supply:300,
-          food_left:100,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        }
-        bulk.push(supplyLeft);
-      }
-    }
-  }
   return bulk;
 }
 
-const bulk = bulkGenerate();
-
 module.exports = {
-  up: (queryInterface, Sequelize) => {
-      return queryInterface.bulkInsert('SupplyAndLefts', bulk, {});
+  up: async (queryInterface, Sequelize) => {
+
+    const studentIds = await queryInterface.sequelize.query(
+      `SELECT id from Students;`
+    );
+
+    const studentIdArray = studentIds[0].map(student=>student.id)
+
+
+    const foodIds = await queryInterface.sequelize.query(
+      `SELECT id from Food;`
+    );
+
+    const foodIdArray = foodIds[0].map(food=>food.id)
+      return queryInterface.bulkInsert('SupplyAndLefts', bulkGenerate([1,2,3,4,5,6,7,8,9,10],[1,2,3,4,5,6]), {});
 
   },
 
