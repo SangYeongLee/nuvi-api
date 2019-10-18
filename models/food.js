@@ -2,8 +2,7 @@
 module.exports = (sequelize, DataTypes) => {
   const Food = sequelize.define('Food', {
     name: DataTypes.STRING,
-    from: DataTypes.STRING,
-    allergy: DataTypes.BOOLEAN,
+    allergy: DataTypes.STRING,
     special: DataTypes.STRING
   }, {});
   Food.associate = function(models) {

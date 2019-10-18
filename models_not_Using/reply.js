@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Reply.associate = function(models) {
     //belongs to user
-    Reply.belongsTo(models.User)
+    Reply.belongsTo(models.Parent)
     Reply.belongsTo(models.Post)
   };
   return Reply;

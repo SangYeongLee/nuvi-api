@@ -4,6 +4,8 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     gender: DataTypes.BOOLEAN,
     student_num: DataTypes.STRING,
+    grade: DataTypes.INTEGER,
+    class_num:DataTypes.INTEGER,
     age: DataTypes.INTEGER,
     height: DataTypes.INTEGER,
     weight: DataTypes.INTEGER,
@@ -20,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
     Student.hasMany(models.SupplyAndLeft);
 
     //belongs To school
-    Student.belongsTo(models.School_sub);
+    Student.belongsTo(models.School);
   };
   return Student;
 };

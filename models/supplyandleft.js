@@ -14,7 +14,9 @@ module.exports = (sequelize, DataTypes) => {
     //belongs To many food
     SupplyAndLeft.belongsTo(models.Food);
 
-    SupplyAndLeft.belongsTo(models.Kiosk);
+    SupplyAndLeft.belongsTo(models.Kiosk,{as:"kioskIn", foreignKey:"kioskInId"});
+
+    SupplyAndLeft.belongsTo(models.Kiosk,{as:"kioskOut",foreignKey:"kioskOutId"});
   };
   return SupplyAndLeft;
 };

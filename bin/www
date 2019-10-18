@@ -30,8 +30,8 @@ console.log(`outside sync port: ${port}`)
 
 // Foreign key constraints 를 무효화 시키는 코드
 sequelize.query('SET FOREIGN_KEY_CHECKS = 0', {raw: true}).then(()=>{
-  //있는 테이블을 다 내리고 지금 테이블로 올림
-  sequelize.sync({force:true}).then(function(){
+  //있는 테이블을 다 내리고 지금 테이블로 올리려면 -> sync({force:true}) 적용
+  sequelize.sync({force:false}).then(function(){
     console.log(`inside sync port: ${port}`)
     server.listen(port);
   })
