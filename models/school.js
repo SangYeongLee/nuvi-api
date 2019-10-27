@@ -1,7 +1,10 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const School = sequelize.define('School', {
-    public_id: DataTypes.STRING,
+    public_id: {
+      type:DataTypes.STRING,
+      unique:true
+    },
     schoolName: DataTypes.STRING,
     region: DataTypes.STRING,
     emhs: DataTypes.STRING,
@@ -12,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
     //hasMany  user
     School.hasMany(models.Kiosk);
 
-    School.hasMany(models.Student);
+    School.hasMany(models.Student,{foreignKey:"schoolUniqueNum",sourceKey:"public_id"});
 
     School.hasMany(models.Parent);
   };

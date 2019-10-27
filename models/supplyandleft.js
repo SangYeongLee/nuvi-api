@@ -6,11 +6,12 @@ module.exports = (sequelize, DataTypes) => {
     food_supply: DataTypes.INTEGER,
     food_left: DataTypes.INTEGER,
     supply_time: DataTypes.DATE,
-    left_time: DataTypes.DATE
+    left_time: DataTypes.DATE,
+    photo: DataTypes.STRING,
   }, {});
   SupplyAndLeft.associate = function(models) {
     //belongs to user
-    SupplyAndLeft.belongsTo(models.Student);
+    SupplyAndLeft.belongsTo(models.Student,{foreignKey:"studentUniqueNum" , targetKey:"uniqueNum"});
     //belongs To many food
     SupplyAndLeft.belongsTo(models.Food);
 

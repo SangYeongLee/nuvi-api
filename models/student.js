@@ -1,6 +1,10 @@
-'use strict';
+ 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Student = sequelize.define('Student', {
+    uniqueNum:{
+      type:DataTypes.STRING,
+      unique:true,
+    },
     name: DataTypes.STRING,
     gender: DataTypes.BOOLEAN,
     student_num: DataTypes.STRING,
@@ -12,17 +16,18 @@ module.exports = (sequelize, DataTypes) => {
     rfid: DataTypes.STRING,
     chat_id:DataTypes.STRING,
     addmission:DataTypes.INTEGER,
-    allergy: DataTypes.STRING
+    allergy: DataTypes.STRING,
+    participate:DataTypes.BOOLEAN,
 
 
 
   }, {});
   Student.associate = function(models) {
     //has Many supplyAndLeft
-    Student.hasMany(models.SupplyAndLeft);
+    Student.hasMany(models.SupplyAndLeft,{foreignKey:"studentUniqueNum", sourceKey:"uniqueNum"});
 
     //belongs To school
-    Student.belongsTo(models.School);
+    Student.belongsTo(models.School,{foreignKey:"schoolUniqueNum",targetKey:"public_id"});
   };
   return Student;
 };
