@@ -7,7 +7,8 @@ module.exports = (sequelize, DataTypes) => {
     food_left: DataTypes.INTEGER,
     supply_time: DataTypes.DATE,
     left_time: DataTypes.DATE,
-    photo: DataTypes.STRING,
+    photo_supply: DataTypes.STRING,
+    photo_left: DataTypes.STRING,
   }, {});
   SupplyAndLeft.associate = function(models) {
     //belongs to user
