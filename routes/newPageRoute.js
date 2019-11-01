@@ -34,10 +34,10 @@ const checkHeader = (req,res,next) => {
 schoolId, grade, classNumber, selectedDate 에 대하여
 "all" 혹은 특정 값을 넣어 데이터 추출하는 라우팅
  */
-router.get('/supplyandleft/:schoolUniqueNum/:grade/:classNumber/:selectedDate/:datePeriod', checkHeader, (req,res,next) => {
+router.get('/supplyandleft/:schoolUniqueNum/:grade/:classNumber/:selectedDate/:firstDate', checkHeader, (req,res,next) => {
   console.log(req.auth)
   if(req.auth){
-    const {schoolUniqueNum, grade, classNumber, selectedDate, datePeriod} = req.params
+    const {schoolUniqueNum, grade, classNumber, selectedDate, firstDate} = req.params
     const queries = {
       include:[{
         model:Student,
@@ -50,7 +50,7 @@ router.get('/supplyandleft/:schoolUniqueNum/:grade/:classNumber/:selectedDate/:d
     classNumber != "all" ? queries.include[0].where.class_num=classNumber : null
     selectedDate != "all" ? queries.where.date = {
       [Op.and]:{
-        [Op.gte]:new Date(Date.parse(selectedDate)-datePeriod*60*60*24*1000).toISOString(),
+        [Op.gte]:firstDate,
         [Op.lte]:selectedDate
       }
     } : null
