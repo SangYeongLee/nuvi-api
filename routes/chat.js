@@ -23,7 +23,7 @@ router.post('/regCheck',function(req,res,next){
                       webLinkUrl:"localhost:4000/kakao/register?chat="
                     }]
                   }
-               }]                        
+               }]
              }
     };
 
@@ -51,7 +51,7 @@ router.post('/regCheck',function(req,res,next){
 router.get('/register', function(req,res,next){
   var code_list=[];
   var school_list=[];
-  
+
   var uri = req.url;
   var chat_id = url.parse(uri,true).query.chat;
   var pkey = url.parse(uri,true).query.key;
@@ -121,7 +121,7 @@ router.post('/registerComplete', function(req,res,next){
     }).then(data=>{
       if(data.length!=0){
         var sid = data[0].id;
-        
+
         Parent.create(
           {name:req.body.name,chat_id:req.body.chat,SchoolId:req.body.school,StudentId:sid}
         ).then(data=>{
@@ -158,7 +158,7 @@ router.post('/reset',function(req,res,next){
                         webLinkUrl:"localhost:4000/kakao/register?chat="+chat+"&key="+key
                       }]
                     }
-                 }]                        
+                 }]
                }
         };
   var key=0;
@@ -189,7 +189,7 @@ router.post('/reset',function(req,res,next){
                             webLinkUrl:"localhost:4000/kakao/register?chat="+chat+"&key="+key
                           }]
                         }
-                     }]                        
+                     }]
                    }
           };
           res.status(200).send(responseBody);
@@ -225,7 +225,7 @@ router.post('/userInfo',function(req,res,next){
           var studentNum = Number(data[0][0].code.substring(8,10));
 
           responseBody = {
-            version: "2.0", 
+            version: "2.0",
             template:{
               outputs:[{
                 simpleText:{
@@ -238,8 +238,8 @@ router.post('/userInfo',function(req,res,next){
               }]
             }
           };
-          res.status(200).send(responseBody);  
-        }         
+          res.status(200).send(responseBody);
+        }
       }).catch(err=>{
         throw err;
       });
@@ -250,14 +250,14 @@ router.post('/userInfo',function(req,res,next){
               + "FROM nuvi_database.Students as stu, nuvi_database.Schools as sch "
               + "WHERE stu.id = "+data[0].StudentId+" and stu.schoolUniqueNum = sch.public_id;";
 
-      db.sequelize.query(infoSQL).then(data=>{       
+      db.sequelize.query(infoSQL).then(data=>{
         console.log(data);
         var grade = Number(data[0][0].code.substring(4,6));
         var classNum = Number(data[0][0].code.substring(6,8));
         var studentNum = Number(data[0][0].code.substring(8,10));
 
         responseBody = {
-          version: "2.0", 
+          version: "2.0",
           template:{
             outputs:[{
               simpleText:{
