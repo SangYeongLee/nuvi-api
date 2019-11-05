@@ -10,6 +10,7 @@ const usersRouter = require('./routes/users');
 const postsRouter = require('./routes/posts');
 const repliesRouter = require('./routes/replies');
 const newPageRouter = require('./routes/newPageRoute');
+const chatRouter = require('./routes/chat');
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api', usersRouter, postsRouter, repliesRouter, newPageRouter);
+app.use('/kakao', chatRouter);
 
 
 // catch 404 and forward to error handler
