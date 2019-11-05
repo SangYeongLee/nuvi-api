@@ -20,7 +20,7 @@ router.post('/regCheck',function(req,res,next){
                     buttons:[{
                       action:"webLink",
                       label:"회원 가입 링크",
-                      webLinkUrl:"localhost:4000/kakao/register?chat="
+                      webLinkUrl:"https://api.nuvi-labs.com/kakao/register?chat="
                     }]
                   }
                }]
@@ -107,7 +107,7 @@ router.post('/registerComplete', function(req,res,next){
                   {where: {uniqueNum:code, name: req.body.name, schoolUniqueNum: req.body.school}}
       ).then(data=>{
         if(data[0]!=0){
-          var ret ={success: true, redirect:true,redirectURL:"http://localhost:4000/kakao/complete"};
+          var ret ={success: true, redirect:true,redirectURL:"https://api.nuvi-labs.com/kakao/complete"};
           res.json(ret);
         }else{
           res.json(null);
@@ -125,7 +125,7 @@ router.post('/registerComplete', function(req,res,next){
         Parent.create(
           {name:req.body.name,chat_id:req.body.chat,SchoolId:req.body.school,StudentId:sid}
         ).then(data=>{
-          var ret ={success: true, redirect:true,redirectURL:"http://localhost:4000/kakao/complete"};
+          var ret ={success: true, redirect:true,redirectURL:"https://api.nuvi-labs.com/kakao/complete"};
           res.json(ret);
         }).catch(err=>{
           throw err;
@@ -155,7 +155,7 @@ router.post('/reset',function(req,res,next){
                       buttons:[{
                         action:"webLink",
                         label:"회원 가입 링크",
-                        webLinkUrl:"localhost:4000/kakao/register?chat="+chat+"&key="+key
+                        webLinkUrl:"https://api.nuvi-labs.com/kakao/register?chat="+chat+"&key="+key
                       }]
                     }
                  }]
@@ -186,7 +186,7 @@ router.post('/reset',function(req,res,next){
                           buttons:[{
                             action:"webLink",
                             label:"회원 가입 링크",
-                            webLinkUrl:"localhost:4000/kakao/register?chat="+chat+"&key="+key
+                            webLinkUrl:"https://api.nuvi-labs.com/kakao/register?chat="+chat+"&key="+key
                           }]
                         }
                      }]
