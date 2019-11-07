@@ -4,6 +4,7 @@ const Sequelize = require('sequelize');
 const {SupplyAndLeft,Food,Student,School,Parent,School_sub} = require('../models');
 const db = require('../models/index');
 const url = require('url');
+const Op = Sequelize.Op;
 
 router.use(express.json());
 
@@ -92,19 +93,31 @@ router.post('/codeCheck', function(req,res,next){
 
 router.post('/nameCheck', function(req,res,next){
   var code = req.body.school+""+req.body.code;
-  Student.findAll({where:{uniqueNum:code,name:req.body.name}}).then(data=>{
-    res.json(data);
+  var n = req.body.name.substring(0,req.body.name.length-1)+'*';
+  
+  Student.findAll({where:{uniqueNum:code,name:req.body.name } }).then(data=>{
+    if(data.length==0){
+      Student.findAll({where:{uniqueNum:code,name: n} }).then(data=>{
+        res.json(data);
+      }).catch(err=>{
+        throw err;
+      });
+    }else{
+      res.json(data);
+    }
   }).catch(err=>{
     throw err;
-  });
+  }); 
 });
 
 //register complete and redirect to complete page
 router.post('/registerComplete', function(req,res,next){
   var code = req.body.school+""+req.body.code;
+  var n = req.body.name.substring(0,req.body.name.length-1)+'%';
+  console.log(n);
   if(req.body.type=="학생"){
       Student.update({chat_id:req.body.chat},
-                  {where: {uniqueNum:code, name: req.body.name, schoolUniqueNum: req.body.school}}
+                  {where: {uniqueNum:code, schoolUniqueNum: req.body.school, name: {[Op.like]: n}}}
       ).then(data=>{
         if(data[0]!=0){
           var ret ={success: true, redirect:true,redirectURL:"https://api.nuvi-labs.com/kakao/complete"};
@@ -123,7 +136,7 @@ router.post('/registerComplete', function(req,res,next){
         var sid = data[0].id;
         
         Parent.create(
-          {name:req.body.name,chat_id:req.body.chat,SchoolId:req.body.school,StudentId:sid}
+          {chat_id:req.body.chat,SchoolId:req.body.school,StudentId:sid}
         ).then(data=>{
           var ret ={success: true, redirect:true,redirectURL:"https://api.nuvi-labs.com/kakao/complete"};
           res.json(ret);
@@ -245,7 +258,6 @@ router.post('/userInfo',function(req,res,next){
       });
      }else{
       //chat id is in parent table
-      console.log("parent id::  " + data[0].StudentId);
       infoSQL = "SELECT stu.name as name, stu.uniqueNum as code, sch.schoolName as school "
               + "FROM nuvi_database.Students as stu, nuvi_database.Schools as sch "
               + "WHERE stu.id = "+data[0].StudentId+" and stu.schoolUniqueNum = sch.public_id;";

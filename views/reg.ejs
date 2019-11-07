@@ -76,6 +76,8 @@
 </div>
 </body>
 <script>
+  var checkCode=false;
+  var checkName=false;
   $('#code').change(function(){
     $.ajax({
               url: '/kakao/codeCheck',
@@ -86,9 +88,12 @@
                   if(result.length==0){
                       $('#info_check').html("존재하지 않는 코드입니다.");
                   }else{
-                    if($('#user_type').val()=="학생" && result.chat_id!=null)
+                    if($('#user_type').val()=="학생" && result.chat_id!=null){
+                      checkCode=false;
                       $('#info_check').html("이미 등록된 학생 아이디입니다.");
+                    }
                     else{
+                      checkCode=true;
                       $('#info_check').html("");
                     }
                   }
@@ -104,8 +109,10 @@
               data: {'code':$('#code').val(),'name':$('#name').val(),'school':$('#school').val()},
               success: function(result) {
                   if(result.length==0){
+                      checkName = false;
                       $('#info_check').html("입력한 코드와 학생의 이름이 일치하지 않습니다.");
                   }else{
+                      checkName = true;
                       $('#info_check').html("");
                   }
               }
@@ -119,8 +126,8 @@
       return;
     }
 
-    if($('#user_type').val()=="" || $('#school').val()=="" || $('#code').val()=="" || $('#name').val()==""){
-      $('#info_check').html("정보를 모두 입력해주시길 바랍니다.");
+    if($('#user_type').val()=="" || $('#school').val()=="" || !checkName || !checkCode){
+      $('#info_check').html("정보를 모두 정확하게 입력해주시길 바랍니다.");
     }else{
       $.ajax({
               url: '/kakao/registerComplete',
