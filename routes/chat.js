@@ -8,6 +8,15 @@ const Op = Sequelize.Op;
 
 router.use(express.json());
 
+function retDateFormat(date){
+    function pad(num) {
+        num = num + '';
+        return num.length < 2 ? '0' + num : num;
+    }
+    return date.getFullYear() + '' + pad(date.getMonth()+1) + pad(date.getDate());
+}
+
+
 //check chat bot id is already registered
 router.post('/regCheck',function(req,res,next){
   var Nchat_id = req.body.userRequest.user.id;
@@ -29,6 +38,7 @@ router.post('/regCheck',function(req,res,next){
     };
 
     db.sequelize.query(searchSQL, { type: db.sequelize.QueryTypes.SELECT}).then(data=>{
+      console.log(data);
       if(data.length!=0){
          //block user already registered
          responseBody = {version: "2.0", template:{outputs:[{simpleText:{text: "이미 등록된 사용자입니다.\n해당 계정으로 서비스를 이용하고 싶으시다면 아이디를 갱신해주시길 바랍니다."}}]}};
@@ -159,6 +169,12 @@ router.get('/complete',function(req,res,next){
 //reset chat bot id
 router.post('/reset',function(req,res,next){
   var chat = req.body.userRequest.user.id;
+  var key=0;
+
+  for(var i=0;i<chat.length;i++){
+    key += chat.charCodeAt(i);
+  };
+
   var responseBody = {
         version: "2.0",
         template:{
@@ -174,12 +190,6 @@ router.post('/reset',function(req,res,next){
                  }]                        
                }
         };
-  var key=0;
-
-  for(var i=0;i<chat.length;i++){
-    key += chat.charCodeAt(i);
-  }
-  console.log(chat);
 
   Student.update({chat_id:null},{where:{chat_id:chat}}).then(data=>{
     if(data[0]!=0){
@@ -285,6 +295,132 @@ router.post('/userInfo',function(req,res,next){
       }).catch(err=>{
         throw err
       });
+    }
+  }).catch(err=>{
+    throw err;
+  });
+});
+
+router.post('/photo',function(req,res,next){
+  var chat=req.body.userRequest.user.id;
+  var searchSQL = "SELECT id FROM Students WHERE chat_id='"+chat+"' UNION SELECT StudentId as id from Parents WHERE chat_id='"+chat+"'";
+  
+  var key = 0;
+  for(i=0;i<chat.length;i++){
+    key += chat.charCodeAt(i);
+  }
+
+  var responseBody = {
+            version: "2.0",
+            template:{
+                     outputs:[{
+                        basicCard:{
+                          description: "등록되지 않은 아이디입니다.\n아래의 링크로 회원가입을 진행해주세요.",
+                          buttons:[{
+                            action:"webLink",
+                            label:"회원 가입 링크",
+                            webLinkUrl:"https://api.nuvi-labs.com/kakao/register?chat="+chat+"&key="+key
+                          }]
+                        }
+                     }]                        
+                   }
+          };
+
+  db.sequelize.query(searchSQL).then(data=>{
+    if(data[0].length==0){
+      res.status(200).send(responseBody);
+    }else{
+      var sid = data[0][0].id;
+      var photoSQL = "SELECT sl.date as date, sl.bld as bld, sl.photo_left as photo "
+                   + "FROM Students as st, SupplyAndLefts as sl "
+                   + "WHERE st.id = "+sid+ " and st.uniqueNum = sl.studentUniqueNum and sl.photo_left is not null "
+                   + "ORDER BY sl.date DESC";
+      
+      db.sequelize.query(photoSQL).then(data=>{
+        if(data[0].length==0){
+          responseBody = {version: "2.0", template:{outputs:[{simpleText:{text: "사진이 등록되어 있지 않습니다.\n등록 관련 문의는 홈페이지를 이용해주세요.\nhttps://nuvi-labs.com/"}}]}};
+          res.status(200).send(responseBody);
+        }else{
+          var path= retDateFormat(data[0][0].date)+"/"+data[0][0].bld.toUpperCase()+"/";
+            responseBody = {
+              version: "2.0", 
+              template:{
+                outputs:[
+                  {simpleText:{text:"가장 최근 잔식 사진입니다."}},
+                  {simpleImage:{imageUrl:"https://nuvi-photo.s3.ap-northeast-2.amazonaws.com/"+path+data[0][0].photo}}
+                ]
+              }
+            };
+          res.status(200).send(responseBody);
+        }
+      }).catch(err=>{
+        throw err;
+      });
+    }
+  }).catch(err=>{
+    throw err;
+  });
+});
+
+router.post('/menu',function(req,res,next){
+  var chat = req.body.userRequest.user.id;
+  var key = 0;
+  var school;
+  for(i=0;i<chat.length;i++){
+    key += chat.charCodeAt(i);
+  }
+
+  var responseBody = {
+            version: "2.0",
+            template:{
+                     outputs:[{
+                        basicCard:{
+                          description: "등록되지 않은 아이디입니다.\n아래의 링크로 회원가입을 진행해주세요.",
+                          buttons:[{
+                            action:"webLink",
+                            label:"회원 가입 링크",
+                            webLinkUrl:"https://api.nuvi-labs.com/kakao/register?chat="+chat+"&key="+key
+                          }]
+                        }
+                     }]                        
+                   }
+          };
+
+  Student.findAll({where:{chat_id:chat}}).then(data=>{
+    if(data.length==0){
+      Parent.findAll({where:{chat_id:chat}}).then(data=>{
+        if(data.length==0){
+          res.status(200).send(responseBody);
+        }else{
+          school = data[0].SchoolId;
+          
+          var url = "";
+          if(school=='1001'){
+            url ="https://school.iamservice.net/organization/2735/group/3369381";
+          }else if(school=='2001'){
+            url = "https://school.iamservice.net/organization/122955/group/3311488";
+          }else{
+            url = "https://school.iamservice.net/organization/20010/group/3318546";
+          }
+          responseBody = {version: "2.0", template:{outputs:[{simpleText:{text: "아래 url을 통해 확인해주세요.\n"+url}}]}};
+          res.status(200).send(responseBody);
+        }
+      }).catch(err=>{
+        throw err;
+      });
+    }else{
+      school = data[0].schoolUniqueNum;
+
+      var url = "";
+      if(school=='1001'){
+        url ="https://school.iamservice.net/organization/2735/group/3369381";
+      }else if(school=='2001'){
+        url = "https://school.iamservice.net/organization/122955/group/3311488";
+      }else{
+        url = "https://school.iamservice.net/organization/20010/group/3318546";
+      }
+      responseBody = {version: "2.0", template:{outputs:[{simpleText:{text: "아래 url을 통해 확인해주세요.\n"+url}}]}};
+      res.status(200).send(responseBody);
     }
   }).catch(err=>{
     throw err;
