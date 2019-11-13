@@ -268,7 +268,7 @@ router.post('/userInfo',function(req,res,next){
       });
      }else{
       //chat id is in parent table
-      infoSQL = "SELECT stu.name as name, stu.uniqueNum as code, sch.schoolName as school "
+      infoSQL = "SELECT stu.name as name, stu.uniqueNum as code, sch.schoolName as school, stu.io_count as point, stu.rank_percent as per "
               + "FROM nuvi_database.Students as stu, nuvi_database.Schools as sch "
               + "WHERE stu.id = "+data[0].StudentId+" and stu.schoolUniqueNum = sch.public_id;";
 
@@ -276,6 +276,8 @@ router.post('/userInfo',function(req,res,next){
         var grade = Number(data[0][0].code.substring(4,6));
         var classNum = Number(data[0][0].code.substring(6,8));
         var studentNum = Number(data[0][0].code.substring(8,10));
+        var point = data[0][0].point * 30;
+        var per = Math.round(data[0][0].per * 100);
 
         responseBody = {
           version: "2.0", 
@@ -284,9 +286,10 @@ router.post('/userInfo',function(req,res,next){
               simpleText:{
                 text: "이름: "+data[0][0].name+
                     "\n학교: "+data[0][0].school+
-                    "\n학년: "+grade+
-                    "\n반  : "+classNum+
-                    "\n번호: "+studentNum
+                    "\n학급: "+grade+"-"+classNum+
+                    "\n번호: "+studentNum+
+                    "\n점수: "+point+
+                  "점\n상위 "+per+"% 입니다."
                }
              }]
            }
@@ -331,7 +334,7 @@ router.post('/photo',function(req,res,next){
       res.status(200).send(responseBody);
     }else{
       var sid = data[0][0].id;
-      var photoSQL = "SELECT sl.date as date, sl.bld as bld, sl.photo_left as photo "
+      var photoSQL = "SELECT sl.date as date, sl.bld as bld, sl.photo_left as photo, st.schoolUniqueNum as school "
                    + "FROM Students as st, SupplyAndLefts as sl "
                    + "WHERE st.id = "+sid+ " and st.uniqueNum = sl.studentUniqueNum and sl.photo_left is not null "
                    + "ORDER BY sl.date DESC";
@@ -341,7 +344,7 @@ router.post('/photo',function(req,res,next){
           responseBody = {version: "2.0", template:{outputs:[{simpleText:{text: "사진이 등록되어 있지 않습니다.\n등록 관련 문의는 홈페이지를 이용해주세요.\nhttps://nuvi-labs.com/"}}]}};
           res.status(200).send(responseBody);
         }else{
-          var path= retDateFormat(data[0][0].date)+"/"+data[0][0].bld.toUpperCase()+"/";
+          var path= data[0][0].school + "/" + retDateFormat(data[0][0].date)+"/"+data[0][0].bld.toUpperCase()+"/";
             responseBody = {
               version: "2.0", 
               template:{
@@ -396,7 +399,7 @@ router.post('/menu',function(req,res,next){
           
           var url = "";
           if(school=='1001'){
-            url ="https://school.iamservice.net/organization/2735/group/3369381";
+            url ="https://ko-kr.classting.com/schools/afd33440-001e-11e2-a217-83705bc2af98/news";
           }else if(school=='2001'){
             url = "https://school.iamservice.net/organization/122955/group/3311488";
           }else{
@@ -413,7 +416,7 @@ router.post('/menu',function(req,res,next){
 
       var url = "";
       if(school=='1001'){
-        url ="https://school.iamservice.net/organization/2735/group/3369381";
+        url ="https://ko-kr.classting.com/schools/afd33440-001e-11e2-a217-83705bc2af98/news";
       }else if(school=='2001'){
         url = "https://school.iamservice.net/organization/122955/group/3311488";
       }else{
